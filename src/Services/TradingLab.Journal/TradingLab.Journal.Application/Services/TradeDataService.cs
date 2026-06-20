@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using TradingLab.Journal.Application.DTOs;
 using TradingLab.Journal.Application.Interfaces;
 using TradingLab.Journal.Domain.Entities;
+using TradingLab.Journal.Domain.Exceptions;
 using TradingLab.Journal.Domain.Interfaces.Repositories;
 
 namespace TradingLab.Journal.Application.Services
@@ -50,6 +51,10 @@ namespace TradingLab.Journal.Application.Services
         public async Task<TradeResponse> GetByIdAsync(Guid id)
         {
             var entity = await _unitOfWork.TradeRepository.GetByIdAsync(id);
+
+            if (entity == null)
+                throw new NotFoundException("Trade", id);
+
             var response = new TradeResponse(entity);
 
             return response;

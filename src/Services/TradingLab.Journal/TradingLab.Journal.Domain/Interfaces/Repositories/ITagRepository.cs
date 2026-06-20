@@ -9,6 +9,7 @@ namespace TradingLab.Journal.Domain.Interfaces.Repositories
 		public Task CreateAsync(Tag entity);
 		public Task UpdateAsync(Tag entity);
 		public Task DeleteAsync(Tag entity);
-	}
+        public Task<bool> ExistsAsync(Guid id);
+    }
 }
 

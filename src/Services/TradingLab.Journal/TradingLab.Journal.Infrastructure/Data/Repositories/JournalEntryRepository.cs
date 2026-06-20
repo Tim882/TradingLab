@@ -29,9 +29,14 @@ namespace TradingLab.Journal.Infrastructure.Data.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task<bool> ExistsAsync(Guid id)
+        {
+            return await _dbSet.AnyAsync(e => e.Id == id);
+        }
+
         public async Task<JournalEntry> GetByIdAsync(Guid id)
         {
-            return await _dbSet.FirstAsync(e => e.Id == id);
+            return await _dbSet.FirstOrDefaultAsync(e => e.Id == id);
         }
 
         public async Task UpdateAsync(JournalEntry entity)

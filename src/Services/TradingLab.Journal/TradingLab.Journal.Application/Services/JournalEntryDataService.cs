@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using TradingLab.Journal.Application.DTOs;
 using TradingLab.Journal.Application.Interfaces;
+using TradingLab.Journal.Domain.Exceptions;
 using TradingLab.Journal.Domain.Interfaces.Repositories;
 
 namespace TradingLab.Journal.Application.Services
@@ -45,6 +46,10 @@ namespace TradingLab.Journal.Application.Services
         public async Task<JournalEntryResponse> GetByIdAsync(Guid id)
         {
             var entity = await _unitOfWork.JournalEntryRepository.GetByIdAsync(id);
+
+            if (entity == null)
+                throw new NotFoundException("JournalEntry", id);
+
             var response = new JournalEntryResponse(entity);
 
             return response;

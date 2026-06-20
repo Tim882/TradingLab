@@ -9,6 +9,7 @@ namespace TradingLab.Journal.Domain.Interfaces.Repositories
 		public Task CreateAsync(Position entity);
 		public Task UpdateAsync(Position entity);
 		public Task DeleteAsync(Position entity);
-	}
+        public Task<bool> ExistsAsync(Guid id);
+    }
 }
 

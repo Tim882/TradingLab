@@ -1,12 +1,13 @@
 ﻿using System;
 using FluentValidation;
 using TradingLab.Journal.Application.DTOs;
+using TradingLab.Journal.Domain.Interfaces.Repositories;
 
 namespace TradingLab.Journal.Application.Validators
 {
 	public class JournalEntryRequestValidator: AbstractValidator<JournalEntryRequest>
     {
-		public JournalEntryRequestValidator()
+		public JournalEntryRequestValidator(IUnitOfWork unitOfWork)
 		{
 			RuleFor(e => e.Mood)
 				.GreaterThanOrEqualTo(1)
