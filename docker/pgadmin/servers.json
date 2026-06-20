@@ -1,0 +1,14 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "TradingLab",
+            "Group": "Docker",
+            "Host": "postgres",
+            "Port": 5432,
+            "MaintenanceDB": "postgres",
+            "Username": "postgres",
+            "Password": "root_secret_password",
+            "SSLMode": "prefer"
+        }
+    }
+}

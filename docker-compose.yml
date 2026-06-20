@@ -1,0 +1,142 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:${POSTGRES_VERSION:-16}-alpine
+    container_name: trading-postgres
+    restart: unless-stopped
+    
+    environment:
+      POSTGRES_USER: ${POSTGRES_ROOT_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_ROOT_PASSWORD}
+    
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d
+    
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_ROOT_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    
+    ports:
+      - "5433:5432"
+    
+    networks:
+      - backend
+      
+  pgadmin:
+    container_name: "pgadmin"
+    image: dpage/pgadmin4:8.8
+    restart: unless-stopped
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: secret
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+      - ./docker/pgadmin/servers.json:/pgadmin4/servers.json
+    depends_on:
+      - postgres
+    networks:
+      - backend
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: trading-rabbitmq
+    restart: unless-stopped
+    
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+    
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    
+    networks:
+      - backend
+
+  redis:
+    image: redis:7-alpine
+    container_name: trading-redis
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - backend
+
+  seq:
+    image: datalust/seq:latest
+    container_name: seq
+    restart: unless-stopped
+    environment:
+      - ACCEPT_EULA=Y
+      - SEQ_FIRSTRUN_ADMINPASSWORD=YourStrongPassword123!
+    ports:
+      - "5341:80"
+    networks:
+      - backend 
+
+  # ==========================================
+  # SERVICES
+  # ==========================================
+  journal-api:
+    build:
+      context: .
+      dockerfile: src/Services/TradingLab.Journal/TradingLab.Journal/Dockerfile
+    container_name: journal-service
+    restart: unless-stopped
+    
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=${JOURNAL_CONNECTION_STRING}
+      - Redis__ConnectionString=redis:6379
+      - RabbitMQ__Host=rabbitmq
+    
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    
+    ports:
+      - "8081:8080"
+    
+    networks:
+      - backend
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  rabbitmq_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  backend:
+    driver: bridge

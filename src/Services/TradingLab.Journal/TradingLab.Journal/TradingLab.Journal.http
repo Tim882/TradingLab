@@ -1,0 +1,7 @@
+﻿@TradingLab.Journal_HostAddress = http://localhost:5026
+
+GET {{TradingLab.Journal_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+

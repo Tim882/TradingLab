@@ -1,0 +1,46 @@
+# ===== .NET =====
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.vs/
+*.DotSettings.user
+*.sln.docstates
+**/Properties/launchSettings.json
+
+# ===== Локальные настройки с секретами =====
+appsettings.*.local.json
+appsettings.Production.json
+
+# ===== Docker =====
+docker-compose.override.yml
+
+# ===== Environment =====
+.env
+*.env.local
+
+# ===== Database init scripts =====
+docker/postgres/init/*.sql
+docker/postgres/init/!01-create-users.sql.example
+
+# ===== IDE =====
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ===== Logs =====
+logs/
+*.log
+
+# ===== EF Core =====
+*.db
+*.db-shm
+*.db-wal
+
+# ===== The Rest =====
+/draft

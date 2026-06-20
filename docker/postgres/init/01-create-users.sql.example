@@ -1,0 +1,20 @@
+-- Copy this file to 01-create-users.sql and replace passwords
+CREATE DATABASE tradinglab_journal;
+CREATE USER journal_service WITH PASSWORD 'change_me';
+GRANT ALL PRIVILEGES ON DATABASE tradinglab_journal TO journal_service;
+
+\c tradinglab_journal
+GRANT ALL ON SCHEMA public TO journal_service;
+GRANT CREATE ON SCHEMA public TO journal_service;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO journal_service;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO journal_service;
+
+CREATE DATABASE auth;
+CREATE USER auth_service WITH PASSWORD 'change_me';
+GRANT ALL PRIVILEGES ON DATABASE auth TO auth_service;
+
+\c auth
+GRANT ALL ON SCHEMA public TO auth_service;
+GRANT CREATE ON SCHEMA public TO auth_service;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO auth_service;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO auth_service;
