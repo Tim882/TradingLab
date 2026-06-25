@@ -14,12 +14,24 @@
     <None Remove="Services\" />
     <None Remove="Interfaces\" />
     <None Remove="Validators\" />
+    <None Remove="Common\" />
+    <None Remove="Common\Pagination\" />
+    <None Remove="Validators\Filter\" />
+    <None Remove="Validators\Request\" />
+    <None Remove="Interfaces\Services\" />
+    <None Remove="Interfaces\Repositories\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DTOs\" />
     <Folder Include="Services\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Validators\" />
+    <Folder Include="Common\" />
+    <Folder Include="Common\Pagination\" />
+    <Folder Include="Validators\Filter\" />
+    <Folder Include="Validators\Request\" />
+    <Folder Include="Interfaces\Services\" />
+    <Folder Include="Interfaces\Repositories\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="12.1.1" />

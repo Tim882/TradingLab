@@ -1,7 +1,7 @@
 ﻿using System;
 using TradingLab.Journal.Domain.Entities;
 
-namespace TradingLab.Journal.Domain.Interfaces.Repositories
+namespace TradingLab.Journal.Application.Interfaces.Repositories
 {
 	public interface IUnitOfWork: IDisposable
     {

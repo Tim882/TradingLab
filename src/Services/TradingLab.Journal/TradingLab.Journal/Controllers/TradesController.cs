@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TradingLab.Journal.Application.Common.Pagination;
 using TradingLab.Journal.Application.DTOs;
 using TradingLab.Journal.Application.Interfaces;
 
@@ -44,6 +45,17 @@ namespace TradingLab.Journal.Controllers
             await _dataService.DeleteAdync(id);
 
             return NoContent();
+        }
+
+        [HttpGet("filter")]
+        [ProducesResponseType(typeof(PaginatedList<TradeResponse>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<PaginatedList<TradeResponse>>> GetFiltered(
+            [FromQuery] TradeFilterDto filter,
+            CancellationToken ct)
+        {
+            var result = await _dataService.GetFilteredAsync(filter, ct);
+
+            return Ok(result);
         }
     }
 }

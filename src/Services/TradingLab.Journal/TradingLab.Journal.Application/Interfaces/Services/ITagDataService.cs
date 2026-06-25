@@ -1,4 +1,5 @@
-﻿using TradingLab.Journal.Application.DTOs;
+﻿using TradingLab.Journal.Application.Common.Pagination;
+using TradingLab.Journal.Application.DTOs;
 
 namespace TradingLab.Journal.Application.Interfaces
 {
@@ -8,6 +9,9 @@ namespace TradingLab.Journal.Application.Interfaces
 		public Task CreateAsync(TagRequest request);
 		public Task UpdateAsync(Guid id, TagRequest request);
 		public Task DeleteAdync(Guid id);
-	}
+        public Task<PaginatedList<TagResponse>> GetFilteredAsync(
+            TagFilterDto filter,
+            CancellationToken ct = default);
+    }
 }
 

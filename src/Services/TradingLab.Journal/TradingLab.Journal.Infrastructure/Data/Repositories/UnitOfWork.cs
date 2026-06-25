@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Storage;
-using TradingLab.Journal.Domain.Interfaces.Repositories;
+using TradingLab.Journal.Application.Interfaces.Repositories;
 using TradingLab.Journal.Infrastructure.Data.Context;
 
 namespace TradingLab.Journal.Infrastructure.Data.Repositories

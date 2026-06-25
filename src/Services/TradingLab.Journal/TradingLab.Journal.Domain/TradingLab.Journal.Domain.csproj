@@ -9,15 +9,11 @@
   <ItemGroup>
     <None Remove="Entities\" />
     <None Remove="Enums\" />
-    <None Remove="Interfaces\" />
-    <None Remove="Interfaces\Repositories\" />
     <None Remove="Exceptions\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Entities\" />
     <Folder Include="Enums\" />
-    <Folder Include="Interfaces\" />
-    <Folder Include="Interfaces\Repositories\" />
     <Folder Include="Exceptions\" />
   </ItemGroup>
 </Project>

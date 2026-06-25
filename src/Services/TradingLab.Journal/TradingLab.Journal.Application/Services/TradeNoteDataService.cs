@@ -3,7 +3,8 @@ using Microsoft.Extensions.Logging;
 using TradingLab.Journal.Application.DTOs;
 using TradingLab.Journal.Application.Interfaces;
 using TradingLab.Journal.Domain.Exceptions;
-using TradingLab.Journal.Domain.Interfaces.Repositories;
+using TradingLab.Journal.Application.Interfaces.Repositories;
+using TradingLab.Journal.Application.Common.Pagination;
 
 namespace TradingLab.Journal.Application.Services
 {
@@ -11,15 +12,18 @@ namespace TradingLab.Journal.Application.Services
 	{
         private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<TradeNoteRequest> _validator;
+        private readonly IValidator<TradeNoteFilterDto> _filterValidator;
         private readonly ILogger<TradeNoteDataService> _logger;
 
 		public TradeNoteDataService(
             IUnitOfWork unitOfWork,
             IValidator<TradeNoteRequest> validator,
+            IValidator<TradeNoteFilterDto> filterValidator,
             ILogger<TradeNoteDataService> logger)
 		{
             _unitOfWork = unitOfWork;
             _validator = validator;
+            _filterValidator = filterValidator;
             _logger = logger;
 		}
 
@@ -64,6 +68,21 @@ namespace TradingLab.Journal.Application.Services
             await _unitOfWork.TradeNoteRepository.UpdateAsync(entity);
 
             _logger.LogInformation($"Trade note with id={id} updated");
+        }
+
+        public async Task<PaginatedList<TradeNoteResponse>> GetFilteredAsync(
+            TradeNoteFilterDto filter, CancellationToken ct = default)
+        {
+            await _filterValidator.ValidateAndThrowAsync(filter, ct);
+
+            var result = await _unitOfWork.TradeNoteRepository.GetFilteredAsync(filter, ct);
+
+            return new PaginatedList<TradeNoteResponse>(
+                    result.Items.Select(i => new TradeNoteResponse(i)).ToList(),
+                    result.TotalCount,
+                    result.PageNumber,
+                    result.PageSize
+                );
         }
     }
 }

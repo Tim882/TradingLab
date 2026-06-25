@@ -1,7 +1,7 @@
 ﻿using System;
 using FluentValidation;
 using TradingLab.Journal.Application.DTOs;
-using TradingLab.Journal.Domain.Interfaces.Repositories;
+using TradingLab.Journal.Application.Interfaces.Repositories;
 
 namespace TradingLab.Journal.Application.Validators
 {

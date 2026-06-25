@@ -3,7 +3,8 @@ using Microsoft.Extensions.Logging;
 using TradingLab.Journal.Application.DTOs;
 using TradingLab.Journal.Application.Interfaces;
 using TradingLab.Journal.Domain.Exceptions;
-using TradingLab.Journal.Domain.Interfaces.Repositories;
+using TradingLab.Journal.Application.Interfaces.Repositories;
+using TradingLab.Journal.Application.Common.Pagination;
 
 namespace TradingLab.Journal.Application.Services
 {
@@ -11,15 +12,18 @@ namespace TradingLab.Journal.Application.Services
 	{
         private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<JournalEntryRequest> _validator;
+        private readonly IValidator<JournalEntryFilterDto> _filterValidator;
         private readonly ILogger<JournalEntryDataService> _logger;
 
 		public JournalEntryDataService(
             IUnitOfWork unitOfWork,
             IValidator<JournalEntryRequest> validator,
+            IValidator<JournalEntryFilterDto> filterValidator,
             ILogger<JournalEntryDataService> logger)
 		{
             _unitOfWork = unitOfWork;
             _validator = validator;
+            _filterValidator = filterValidator;
             _logger = logger;
 		}
 
@@ -64,6 +68,21 @@ namespace TradingLab.Journal.Application.Services
             await _unitOfWork.JournalEntryRepository.UpdateAsync(entity);
 
             _logger.LogInformation($"Journal entry with id={id} updated");
+        }
+
+        public async Task<PaginatedList<JournalEntryResponse>> GetFilteredAsync(
+            JournalEntryFilterDto filter, CancellationToken ct = default)
+        {
+            await _filterValidator.ValidateAndThrowAsync(filter, ct);
+
+            var result = await _unitOfWork.JournalEntryRepository.GetFilteredAsync(filter, ct);
+
+            return new PaginatedList<JournalEntryResponse>(
+                    result.Items.Select(i => new JournalEntryResponse(i)).ToList(),
+                    result.TotalCount,
+                    result.PageNumber,
+                    result.PageSize
+                );
         }
     }
 }

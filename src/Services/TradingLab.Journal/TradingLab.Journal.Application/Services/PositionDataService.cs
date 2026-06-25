@@ -3,7 +3,8 @@ using Microsoft.Extensions.Logging;
 using TradingLab.Journal.Application.DTOs;
 using TradingLab.Journal.Application.Interfaces;
 using TradingLab.Journal.Domain.Exceptions;
-using TradingLab.Journal.Domain.Interfaces.Repositories;
+using TradingLab.Journal.Application.Interfaces.Repositories;
+using TradingLab.Journal.Application.Common.Pagination;
 
 namespace TradingLab.Journal.Application.Services
 {
@@ -11,15 +12,18 @@ namespace TradingLab.Journal.Application.Services
 	{
         private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<PositionRequest> _validator;
+        private readonly IValidator<PositionFilterDto> _filterValidator;
         private readonly ILogger<PositionDataService> _logger;
 
 		public PositionDataService(
             IUnitOfWork unitOfWork,
             IValidator<PositionRequest> validator,
+            IValidator<PositionFilterDto> filterValidator,
             ILogger<PositionDataService> logger)
 		{
             _unitOfWork = unitOfWork;
             _validator = validator;
+            _filterValidator = filterValidator;
             _logger = logger;
 		}
 
@@ -64,6 +68,21 @@ namespace TradingLab.Journal.Application.Services
             await _unitOfWork.PositionRepository.UpdateAsync(entity);
 
             _logger.LogInformation($"Position with id={id} updated");
+        }
+
+        public async Task<PaginatedList<PositionResponse>> GetFilteredAsync(
+            PositionFilterDto filter, CancellationToken ct = default)
+        {
+            await _filterValidator.ValidateAndThrowAsync(filter, ct);
+
+            var result = await _unitOfWork.PositionRepository.GetFilteredAsync(filter, ct);
+
+            return new PaginatedList<PositionResponse>(
+                    result.Items.Select(i => new PositionResponse(i)).ToList(),
+                    result.TotalCount,
+                    result.PageNumber,
+                    result.PageSize
+                );
         }
     }
 }
