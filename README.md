@@ -1,5 +1,3 @@
-```markdown
-
 ![.NET](https://img.shields.io/badge/.NET-8.0-purple)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue)
 ![RabbitMQ](https://img.shields.io/badge/RabbitMQ-3.x-orange)
@@ -69,7 +67,6 @@ TradingLab построен как **микросервисная система
 - **Domain** — сущности, енумы, доменные исключения, бизнес-логика
 - **Infrastructure** — репозитории, DbContext, HTTP-клиенты
 
-```mermaid
 graph TB
     FE[Frontend<br/>React 19 + TS + MUI]
     GW[API Gateway<br/>YARP Reverse Proxy]
@@ -200,4 +197,3 @@ graph TB
 - Email: sharf_ti@mail.ru
 - Telegram: @sharf_tim
 - GitHub: [github.com/Tim882](https://github.com/Tim882)
-```
