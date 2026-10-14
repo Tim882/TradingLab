@@ -110,7 +110,6 @@ graph TB
     Notification --> RQ
     Audit --> RQ
     Indicators --> RQ
-```
 
 ### Взаимодействие сервисов
 
@@ -202,5 +201,3 @@ graph TB
 - Telegram: @sharf_tim
 - GitHub: [github.com/Tim882](https://github.com/Tim882)
 ```
-
-1. **Скриншот дашборда** — вставь после строки `[Здесь будет скриншот дашборда]`. Лучше сделай 3-5 скриншотов: Dashboard, Journal, Backtest, Signals, Portfolio. Вставь их в README или в папку `screenshots/`.
