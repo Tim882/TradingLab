@@ -17,7 +17,7 @@
 ![Calculators](screenshots/calculators.png)
 
 ### Покрытие данных
-![Data Coverage](screenshots/data-coverage.png)
+![Data Coverage](screenshots/coverage.png)
 
 ---
 
@@ -67,6 +67,7 @@ TradingLab построен как **микросервисная система
 - **Domain** — сущности, енумы, доменные исключения, бизнес-логика
 - **Infrastructure** — репозитории, DbContext, HTTP-клиенты
 
+```mermaid
 graph TB
     FE[Frontend<br/>React 19 + TS + MUI]
     GW[API Gateway<br/>YARP Reverse Proxy]
@@ -107,6 +108,7 @@ graph TB
     Notification --> RQ
     Audit --> RQ
     Indicators --> RQ
+```
 
 ### Взаимодействие сервисов
 
